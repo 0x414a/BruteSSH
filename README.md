@@ -1,19 +1,31 @@
 # Abstract
 
 Multi-thread + sub-thread multi-target brute-force crack, support SOCKS5 proxy protocol (no authentication)
+
+Burst Mode:
+
+​				Specify the username and password file  
+​				
+​				Specify the username and password directly
+​				
+
+​				Specify username and password file + Specify username and password directly
+​				
+​				Default threads: 50  
+
+--------------------------------------------------------------------------------------------------------------------
+
 多线程 + 子线程多目标暴力破解，支持SOCKS5代理协议(无认证)
 
+暴破模式:
 
-Burst Mode(暴破模式):
+​				指定用户名、密码文件
 
-​				Specify the username and password file  (指定用户名、密码文件)
-​				
-​				Specify the username and password directly  (直接指定用户名、密码)
-​				
+​				直接指定用户名、密码
 
-​				Specify username and password file + Specify username and password directly  (指定用户名、密码文件+直接指定用户名、密码)
-​				
-​				Default threads: 50  (默认线程 ：50)
+​				指定用户名、密码文件+直接指定用户名、密码
+
+​				默认线程 ：50
 ​				
 # compile(编译):
 
