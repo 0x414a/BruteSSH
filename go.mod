@@ -1,4 +1,4 @@
-module bruteSSH
+module BruteSSH
 
 go 1.21.1
 
