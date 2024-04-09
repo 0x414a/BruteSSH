@@ -10,7 +10,7 @@ Burst Mode:
 
 ​				Specify username and password file + Specify username and password directly
 
-​				Default threads: 50  
+Default threads: 50  
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ Burst Mode:
 
 ​				指定用户名、密码文件+直接指定用户名、密码
 
-​				默认线程 ：50
+默认线程 ：50
 ​				
 # compile(编译):
 
