@@ -8,9 +8,8 @@ Burst Mode:
 ​				
 ​				Specify the username and password directly
 ​				
-
 ​				Specify username and password file + Specify username and password directly
-​				
+
 ​				Default threads: 50  
 
 --------------------------------------------------------------------------------------------------------------------
