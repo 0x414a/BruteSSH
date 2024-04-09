@@ -5,27 +5,24 @@ Multi-thread + sub-thread multi-target brute-force crack, support SOCKS5 proxy p
 多线程 + 子线程多目标暴力破解，支持SOCKS5代理协议(无认证)
 
 
-Burst Mode:
-暴破模式：
+Burst Mode(暴破模式):
 
-​				Specify the username and password file
-​				指定用户名、密码文件
+​				Specify the username and password file  (指定用户名、密码文件)
+​				
+​				Specify the username and password directly  (直接指定用户名、密码)
+​				
 
-​				Specify the username and password directly
-​				直接指定用户名、密码
-
-​				Specify username and password file + Specify username and password directly
-​				指定用户名、密码文件+直接指定用户名、密码
-
-​				Default threads: 50
-​				默认线程 ：50
+​				Specify username and password file + Specify username and password directly  (指定用户名、密码文件+直接指定用户名、密码)
+​				
+​				Default threads: 50  (默认线程 ：50)
+​				
 # compile(编译):
 
 ```
 go build BruteSSH.go 
 ```
 
-# Usage(使用):
+# Usage(使用方法):
 
 ```
 ./BruteSSH -h
