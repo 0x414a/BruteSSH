@@ -1,7 +1,6 @@
 # Abstract
 
 Multi-thread + sub-thread multi-target brute-force crack, support SOCKS5 proxy protocol (no authentication)
-
 多线程 + 子线程多目标暴力破解，支持SOCKS5代理协议(无认证)
 
 
