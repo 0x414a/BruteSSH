@@ -4,9 +4,9 @@ Multi-thread + sub-thread multi-target brute-force crack, support SOCKS5 proxy p
 
 Burst Mode:
 
-​				​				Specify the username and password file
+	Specify the username and password file
 
-​				​				Specify the username and password directly
+	Specify the username and password directly
 
 ​				Specify username and password file + Specify username and password directly
 
