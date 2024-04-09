@@ -1,4 +1,4 @@
-# Abstract
+# abstract
 
 多线程 + 子线程多目标暴力破解，支持SOCKS5代理协议(无认证)
 
@@ -48,5 +48,6 @@ Usage of ./BruteSSH:
 eg:
 	-h 127.0.0.1 -u u.txt -p p.txt -d 1 -t 50 
 	-h 127.0.0.1,192.168.1.1 -u u.txt -p p.txt -d 1 -t 50 -U 414a -P 123456 -proxy 127.0.0.1:7890
+
 ```
 
