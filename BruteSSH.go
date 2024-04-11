@@ -42,29 +42,30 @@ func ensurePort(addresses []string) []string {
 
 // burstIP attempts SSH connections using provided credentials and proxy.
 func burstIP(address string, users, passwords []string, dialer proxy.Dialer, threadCount, detail int) {
-	addrCtx, addrCancel := context.WithCancel(context.Background())
-	var wg sync.WaitGroup
-	semaphore := make(chan struct{}, threadCount)
-	for _, user := range users {
-		for _, pass := range passwords {
-			select {
-			case <-addrCtx.Done():
-
-				return
-			case semaphore <- struct{}{}:
-			}
-			wg.Add(1)
-			go func(user, pass string) {
-				defer wg.Done()
-				if trySSH(user, pass, address, dialer, detail) {
-					addrCancel()
-				}
-				<-semaphore
-			}(user, pass)
-		}
-	}
-	wg.Wait()
+    addrCtx, addrCancel := context.WithCancel(context.Background())
+    defer addrCancel() // 确保在函数结束时调用addrCancel，避免资源泄漏
+    var wg sync.WaitGroup
+    semaphore := make(chan struct{}, threadCount)
+    for _, user := range users {
+        for _, pass := range passwords {
+            select {
+            case <-addrCtx.Done():
+                return
+            case semaphore <- struct{}{}:
+            }
+            wg.Add(1)
+            go func(user, pass string) {
+                defer wg.Done()
+                if trySSH(user, pass, address, dialer, detail) {
+                    addrCancel() // 成功的情况下提前退出
+                }
+                <-semaphore
+            }(user, pass)
+        }
+    }
+    wg.Wait()
 }
+
 
 // trySSH tries an SSH connection with the given credentials and proxy.
 func trySSH(user, pass, address string, dialer proxy.Dialer, detail int) bool {
